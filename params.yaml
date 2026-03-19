@@ -1,0 +1,11 @@
+model:
+  name: Qwen/Qwen2.5-3B
+  save_path: "diplom/artifacts/models/qwen2_5_3b"
+
+datasets:
+  math: "openai/gsm8k"
+  save_path_math: "diplom/artifacts/data"
+
+open_router:
+  url: "https://openrouter.ai/api/v1/chat/completions"
+  model_name: "meta-llama/llama-3.3-70b-instruct:free"
