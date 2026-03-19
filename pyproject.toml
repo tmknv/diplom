@@ -1,14 +1,17 @@
 [project]
 name = "diplom"
-version = "0.1.0"
-description = ""
+version = "1.0.0"
+description = "Дистилляция ризонинка в slm. Ограничение - малоресурсность"
 authors = [
     {name = "Timofey Kuznetsov"}
 ]
 license = {text = "apache 2.0"}
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.15"
 dependencies = [
-    "dvc (>=3.67.0,<4.0.0)"
+    "transformers (>=5.3.0,<6.0.0)",
+    "torch (>=2.10.0,<3.0.0)",
+    "torchvision (>=0.25.0,<0.26.0)",
+    "pydantic (>=2.12.5,<3.0.0)"
 ]
 
 
