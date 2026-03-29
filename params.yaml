@@ -4,8 +4,46 @@ model:
 
 datasets:
   math: "openai/gsm8k"
+  math_full_path: "diplom/artifacts/data/openai/gsm8k"
   save_path_math: "diplom/artifacts/data"
+
+llm_result:
+  answer_generation:
+    base_llm: "diplom/artifacts/answers/base_llm.json"
+    fine_tuned_llm: "diplom/artifacts/answers/fine_tuned_llm.json"
+    lora_tuned_llm: "diplom/artifacts/answers/lora_tuned_llm.json"
+    reasoning_tuned_llm: "diplom/artifacts/answers/reasoning_tuned_llm.json"
 
 open_router:
   url: "https://openrouter.ai/api/v1/chat/completions"
   model_name: "meta-llama/llama-3.3-70b-instruct:free"
+
+prompt:
+  qwen:
+    system_prompt: |
+      """
+      <role>
+      You are a mathematician. Solve the problem carefully.
+      </role>
+      """
+    user_prompt: |
+      """
+      <answer-rules>
+        1. Return JSON and nothing else.
+        2. Follow JSON template.
+        3. Answer must be a number.
+      </answer-rules>
+      <json-template>
+      {"answer": string}
+      </json-template>
+      <task>
+      Your tasks are:
+        1. Follow answer-rules .
+        2. Answer on math-problem.
+      </task>
+      <math-problem>
+      {{MATH_PROBLEM}}
+      </math-problem>
+      """
+
+
