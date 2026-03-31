@@ -1,0 +1,8 @@
+{
+  "base_llm_classic_fine_tuned": {
+    "validator_name": "ValidateBaseModel",
+    "model_name": "Qwen/Qwen2.5-3B",
+    "f1_score": 0.1233,
+    "meta": {}
+  }
+}
