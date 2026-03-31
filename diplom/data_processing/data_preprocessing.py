@@ -87,9 +87,18 @@ class DataProcessor:
             except Exception:
                 cleaned = None
 
-            return {"cleaned_answer_for_f1": cleaned}
+            return {"one_num_answer": cleaned}
 
         # применяем ко всем сплитам (train/test)
         dataset = dataset.map(_extract_answer)
 
         return dataset
+
+
+class DataProcessorTraining:
+    """
+    Класс для:
+        1. Получения данных для разного обучения
+        2. Сохранения обработанных данных
+    """
+
