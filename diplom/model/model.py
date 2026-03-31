@@ -40,6 +40,7 @@ class Model:
 
         self.tokenizer: Optional[AutoTokenizer] = tokenizer
         self.model: Optional[AutoModelForCausalLM] = model
+        self.model.to(dtype=torch.bfloat16)
 
     def __make_valid_mode(self) -> None:
         """
@@ -139,8 +140,9 @@ class Model:
         answer = tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
 
         return answer
-
-    def fine_tune(self, train_dataset=None, **kwargs) -> None:
+    
+    
+    def fit(self) -> None:
         """
         Запускает процесс дообучения модели.
 
@@ -157,82 +159,16 @@ class Model:
             ValueError: Если режим не "train".
             RuntimeError: Если модель не удалось загрузить.
         """
+        
         if self.mode != "train":
-            raise ValueError("Метод fine_tune доступен только в режиме 'train'")
+            raise ValueError("Метод fit доступен только в режиме 'train'")
+        
+        raise NotImplementedError(
+            "Метод fit ещё не реализован. "
+            "Переопределение будет в дочернем классе."
+        )
 
-        model_bundle = self._get_model()
-        if model_bundle is None:
-            raise RuntimeError("Не удалось загрузить модель")
-
-        tokenizer, model = model_bundle
-
-        logger.info("Старт дообучения модели")
-
-        # TODO: сюда можно подключить Trainer / PEFT / LoRA / DPO
-        # пример точки расширения:
-        # trainer = Trainer(...)
-        # trainer.train()
-
-        if train_dataset is None:
-            logger.warning("train_dataset не передан — обучение не выполнено")
-            return
-
-        logger.info("Дообучение завершено (заглушка)")
     
-
-    def get_model_answers(self, dataset):
-        """
-        Генерирует ответы модели для датасета.
-
-        Args:
-            dataset (datasets.Dataset): Датасет (обычно test split).
-
-        Returns:
-            list: Список ответов модели (строки).
-        """
-
-        if self.model is None or self.tokenizer is None:
-            logger.error("Модель не загружена")
-            return []
-
-        if dataset is None:
-            logger.error("Датасет не передан")
-            return []
-
-        model_answers = []
-
-        for example in dataset:
-            try:
-                prompt = example["question"]
-
-                inputs = self.tokenizer(
-                    prompt,
-                    return_tensors="pt",
-                    truncation=True
-                )
-
-                if torch.cuda.is_available():
-                    inputs = {k: v.to("cuda") for k, v in inputs.items()}
-
-                with torch.no_grad():
-                    outputs = self.model.generate(
-                        **inputs,
-                        max_new_tokens=50,
-                        do_sample=False
-                    )
-
-                decoded = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-                # чтоб тока сгенеренную часть взять
-                answer = decoded[len(prompt):].strip()
-
-                model_answers.append(answer)
-
-            except Exception as e:
-                logger.warning(f"Ошибка на примере: {e}")
-                model_answers.append(None)
-
-        return model_answers
 
 
 
