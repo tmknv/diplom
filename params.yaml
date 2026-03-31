@@ -1,6 +1,7 @@
 model:
   name: Qwen/Qwen2.5-3B
-  save_path: "diplom/artifacts/models/qwen2_5_3b"
+  save_path: "diplom/artifacts/models/fine_tuned/classic/qwen2_5_3b/checkpoint-750"
+  # save_path: "diplom/artifacts/models/qwen2_5_3b"
 
 datasets:
   math: "openai/gsm8k"
@@ -10,9 +11,43 @@ datasets:
 llm_result:
   answer_generation:
     base_llm: "diplom/artifacts/answers/base_llm.json"
-    fine_tuned_llm: "diplom/artifacts/answers/fine_tuned_llm.json"
+    base_llm_classic_fine_tuned: "diplom/artifacts/answers/checkpoint-750.json"
     lora_tuned_llm: "diplom/artifacts/answers/lora_tuned_llm.json"
     reasoning_tuned_llm: "diplom/artifacts/answers/reasoning_tuned_llm.json"
+  metrics:
+    train: "diplom/artifacts/metrics/train"
+    test: "diplom/artifacts/metrics/test"
+
+fine_tune_params:
+  use_dataset_size: 1000
+  use_dataset_size_eval: 50
+  classic:
+    output_dir: "diplom/artifacts/models/fine_tuned/classic/qwen2_5_3b"
+    num_train_epochs: 3
+    per_device_train_batch_size: 1
+    # gradient_accumulation_steps: 4
+    gradient_accumulation_steps: 2
+    learning_rate: 2.0e-5
+    lr_scheduler_type: "cosine"
+    warmup_steps: 50
+    fp16: false # для винды
+    bf16: true
+    logging_steps: 50
+    save_steps: 100
+    save_total_limit: 2
+    report_to: "none"
+    remove_unused_columns: false
+    dataloader_num_workers: 0
+    seed: 42
+
+    load_best_model_at_end: true
+    metric_for_best_model: "eval_loss"
+    greater_is_better: false
+
+    eval_strategy: "steps" 
+    save_strategy: "steps"
+    eval_steps: 100
+    dataloader_pin_memory: false
 
 open_router:
   url: "https://openrouter.ai/api/v1/chat/completions"
