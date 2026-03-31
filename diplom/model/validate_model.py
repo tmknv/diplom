@@ -106,7 +106,8 @@ class ValidateBaseModel(Validator):
         return Metrics(
                 validator_name=self.name,
                 model_name=model_name,
-                f1_score=score.__round__(4)
+                f1_score=score.__round__(4),
+                meta = {}
             )
         
 
@@ -114,16 +115,25 @@ if __name__ == "__main__":
 
     import json 
 
-    llm_type = "base_llm"
+    llm_type = "base_llm_classic_fine_tuned"
     path = params["llm_result"]["answer_generation"][llm_type]
+    save_path = params["llm_result"]["metrics"]["test"]
+
+    os.makedirs(save_path, exist_ok=True)
 
     with open (path, "r", encoding = "utf-8") as f:
 
         slm_outs = json.load(f)
 
+
     validator = ValidateBaseModel()
     answ = validator.validate(slm_outs = slm_outs)
 
     print (answ)
+    json_answ = {
+        llm_type: answ.model_dump()
+    }
+    with open(f"{save_path}/{llm_type}.json", "w", encoding = "utf-8") as f:
+        json.dump(json_answ, f, ensure_ascii= False, indent=2)
 
     
