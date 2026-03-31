@@ -61,3 +61,13 @@ def load_model():
     print(f"Модель сохранена в: {save_path}")
 
     return tokenizer, model
+
+if __name__ == "__main__":
+
+    tokenizer, model = load_model()
+
+    # проверю на спец токены
+    for token in ["<think>", "</think>", "<answer>", "</answer>"]:
+        tokens = tokenizer.tokenize(token)
+        print(tokens)
+        
