@@ -80,5 +80,31 @@ prompt:
       {{MATH_PROBLEM}}
       </math-problem>
       """
+    
+    system_prompt_think: |
+      """
+      <system>
+      You are a reasoning assistant.
+
+      For every problem:
+      1. You MUST produce reasoning inside <think></think>.
+      2. You MUST always output <think> and </think>.
+      3. After </think>, output only the final answer.
+      4. Never skip the reasoning block.
+      </system>
+      """
+    user_prompt_think: |
+      """
+      <answer-format>
+      <think>
+      step-by-step reasoning
+      </think>
+      final answer
+      </answer-format>
+
+      <problem>
+      {MATH_PROBLEM}
+      </problem>
+      """
 
 
