@@ -32,8 +32,7 @@ from diplom.model.model import Model
 from diplom.model.load_model import load_model
 from diplom.data_processing.load_data import load_data
 from diplom.data_processing.data_preprocessing import DataProcessor
-from diplom.utils.logger import get_logger
-from diplom.utils.logger import setup_logging
+from diplom.utils.logger import get_logger, setup_logging
 from diplom.utils.load_params import get_params
 
 setup_logging()
@@ -55,7 +54,7 @@ def _postprocess_answer(answer: str) :
         3. чистит спецсимволы
         4. пытается починить кривой JSON
     Args:
-        answer (str): строка с нужным ответ.
+        answer (str): строка с нужным ответом.
     Returns:
         dict: почищенный ответ
     """

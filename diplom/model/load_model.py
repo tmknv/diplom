@@ -10,8 +10,7 @@ import os
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from diplom.utils.logger import get_logger
-from diplom.utils.logger import setup_logging
+from diplom.utils.logger import get_logger, setup_logging
 from diplom.utils.load_params import get_params
 from diplom.utils.init_secrets import get_settings
 
@@ -70,4 +69,4 @@ if __name__ == "__main__":
     for token in ["<think>", "</think>", "<answer>", "</answer>"]:
         tokens = tokenizer.tokenize(token)
         print(tokens)
-        
+
