@@ -6,15 +6,6 @@
     diplom/artifactc/models/model_name
 """
 
-
-# diplom/diplom/model/classic_model_fine_tune.py
-"""
-Классическое обучение модельки.
-Вопрос - ответ
-Сохраняем результат в 
-    "diplom/artifacts/models/fine_tuned/classic/qwen2_5_3b"
-"""
-
 import os
 os.environ["PYTORCH_MPS_HIGH_WATERMARK_RATIO"] = "0.0"  
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
@@ -27,7 +18,6 @@ from typing import Any, Dict
 from diplom.model.model import Model
 from diplom.utils.logger import get_logger, setup_logging
 from diplom.utils.load_params import get_params
-from diplom.data_processing.load_data import load_data
 
 from transformers import (
     Trainer,
