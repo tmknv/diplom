@@ -21,7 +21,7 @@ params = get_params()
 settings = get_settings()
 
 
-def load_model():
+def load_and_store_model():
     """
     Returns:
         tokenizer, model
@@ -29,7 +29,7 @@ def load_model():
     token = settings.HF_TOKEN
 
     model_name = params["model"]["name"]
-    save_path = params["model"]["save_path"]
+    save_path = params["model"]["base_llm_path"]
 
     logger.info(f"Проверка наличия модели в: {save_path}")
 
@@ -63,10 +63,11 @@ def load_model():
 
 if __name__ == "__main__":
 
-    tokenizer, model = load_model()
+    load_and_store_model()
+    # tokenizer, model = load_model()
 
-    # проверю на спец токены
-    for token in ["<think>", "</think>", "<answer>", "</answer>"]:
-        tokens = tokenizer.tokenize(token)
-        print(tokens)
+    # # проверю на спец токены
+    # for token in ["<think>", "</think>", "<answer>", "</answer>"]:
+    #     tokens = tokenizer.tokenize(token)
+    #     print(tokens)
 
