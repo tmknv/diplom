@@ -1,12 +1,18 @@
 model:
   name: Qwen/Qwen2.5-3B
+  base_llm_path: "diplom/artifacts/models/qwen2_5_3b"
+  base_llm_path_with_think_tokens: "diplom/artifacts/models/qwen2_5_3b_think"
   save_path: "diplom/artifacts/models/fine_tuned/classic/qwen2_5_3b/checkpoint-750"
   # save_path: "diplom/artifacts/models/qwen2_5_3b"
 
 datasets:
   math: "openai/gsm8k"
-  math_full_path: "diplom/artifacts/data/openai/gsm8k"
-  save_path_math: "diplom/artifacts/data"
+  math_full_path: "diplom/artifacts/data/openai_gsm8k"
+  reasoning_destil_path: "diplom/artifacts/datasets_for_tune"
+  train_file: train.parquet
+  # valid_file: valid.parquet
+  test_file: test.parquet
+
 
 llm_result:
   answer_generation:
@@ -19,10 +25,11 @@ llm_result:
     test: "diplom/artifacts/metrics/test"
 
 fine_tune_params:
-  use_dataset_size: 1000
+  use_dataset_size: 500
   use_dataset_size_eval: 50
   classic:
-    output_dir: "diplom/artifacts/models/fine_tuned/classic/qwen2_5_3b"
+    output_dir: "diplom/artifacts/fine_tuned_models/qwen2_5_3b_think"
+    # output_dir: "diplom/artifacts/models/fine_tuned/classic/qwen2_5_3b"
     num_train_epochs: 3
     per_device_train_batch_size: 1
     # gradient_accumulation_steps: 4
@@ -31,7 +38,7 @@ fine_tune_params:
     lr_scheduler_type: "cosine"
     warmup_steps: 50
     fp16: false # для винды
-    bf16: true
+    bf16: false
     logging_steps: 50
     save_steps: 100
     save_total_limit: 2
@@ -56,13 +63,10 @@ open_router:
 prompt:
   qwen:
     system_prompt: |
-      """
       <role>
       You are a mathematician. Solve the problem carefully.
       </role>
-      """
     user_prompt: |
-      """
       <answer-rules>
         1. Return JSON and nothing else.
         2. Follow JSON template.
@@ -79,10 +83,8 @@ prompt:
       <math-problem>
       {{MATH_PROBLEM}}
       </math-problem>
-      """
     
     system_prompt_think: |
-      """
       <system>
       You are a reasoning assistant.
 
@@ -92,9 +94,7 @@ prompt:
       3. After </think>, output only the final answer.
       4. Never skip the reasoning block.
       </system>
-      """
     user_prompt_think: |
-      """
       <answer-format>
       <think>
       step-by-step reasoning
@@ -105,6 +105,5 @@ prompt:
       <problem>
       {MATH_PROBLEM}
       </problem>
-      """
 
 
