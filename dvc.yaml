@@ -1,11 +1,63 @@
 stages:
-
   get_data:
+    cmd: poetry run python3 -m diplom.data_processing.load_data
+    deps:
+      - diplom/data_processing/load_data.py
+    params:
+      - datasets
+    outs:
+      - ${datasets.math_full_path}
 
-  processed_data:
+  prepare_data:
+    cmd: poetry run python3 -m diplom.pipelines.destil_data_maker
+    deps:
+      - diplom/data_processing/data_preprocessing.py
+      - diplom/pipelines/destil_data_maker.py
+      - diplom/utils/load_params.py
+    params:
+      - datasets
+    outs:
+      - ${datasets.reasoning_destil_path}/${datasets.train_file}
+      - ${datasets.reasoning_destil_path}/${datasets.test_file}
 
-  load_model:
+
+  get_model:
+    cmd: poetry run python3 -m diplom.model.load_model
+    deps:
+      - diplom/model/load_model.py
+    params:
+      - model
+    outs:
+      - ${model.base_llm_path}
+
+  add_think_tokens:
+    cmd: poetry run python3 -m diplom.model.add_special_tokens
+    deps:
+      - diplom/model/add_special_tokens.py
+      - diplom/model/load_model.py
+    outs:
+      - ${model.base_llm_path_with_think_tokens}
+
 
   fine_tune:
-  
-  validate:
+    cmd: poetry run python3 -m diplom.pipelines.think_tune_pipeline
+    deps:
+      - diplom/pipelines/think_tune_pipeline.py
+      - diplom/model/fine_tune/reasoning_destil.py
+      - diplom/model/add_special_tokens.py
+      - diplom/data_processing/data_preprocessing.py
+      - diplom/pipelines/destil_data_maker.py
+      - ${datasets.reasoning_destil_path}/${datasets.train_file}
+      - ${datasets.reasoning_destil_path}/${datasets.test_file}
+    params:
+      - fine_tune_params
+    outs:
+      - ${fine_tune_params.classic.output_dir}
+
+  # validate:
+  #   cmd: python -m diplom.pipelines.validate_pipeline
+  #   deps:
+  #     - diplom/artifacts/checkpoints
+  #     - diplom/artifacts/datasets/processed/test.parquet
+  #   metrics:
+  #     - diplom/artifacts/metrics/metrics.json
