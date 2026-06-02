@@ -1,4 +1,4 @@
-# diplom/diplom/data/load_data.py
+# diplom/data/load_data.py
 """
 Загружаем датасет с HF и сохраняем локально.
 Name, save path из params.yaml
@@ -22,12 +22,13 @@ params = get_params()
 settings = get_settings()
 
 
-def load_data():
+def load_and_store_data() -> None:
     token = settings.HF_TOKEN
 
     dataset_name = params["datasets"]["math"]
-    save_path = params["datasets"]["save_path_math"]
-    full_path = f"{save_path}/{dataset_name}"
+
+    full_path = params["datasets"]["math_full_path"]
+
 
     logger.info(f"Проверка наличия датасета в: {full_path}")
 
@@ -57,8 +58,11 @@ def load_data():
 
         logger.info(f"Датасет {dataset_name} сохранен в {full_path}")
         print(f"Датасет сохранен в: {full_path}")
+        return dataset
 
     except Exception as e:
         logger.error(f"Не смогли сохранить датасет: {e}")
 
-    return dataset
+
+if __name__ == "__main__":
+    load_and_store_data()
