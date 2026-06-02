@@ -18,7 +18,7 @@ from typing import Any, Dict
 from diplom.model.model import Model
 from diplom.utils.logger import get_logger, setup_logging
 from diplom.utils.load_params import get_params
-from diplom.data_processing.load_data import load_data
+
 
 from transformers import (
     Trainer,
