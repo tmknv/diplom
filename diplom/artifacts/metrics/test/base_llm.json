@@ -2,7 +2,8 @@
   "base_llm": {
     "validator_name": "ValidateBaseModel",
     "model_name": "Qwen/Qwen2.5-3B",
-    "f1_score": 0.1433,
+    "EM_score": 0.1433,
+    "RC": 0,
     "meta": {}
   }
 }
